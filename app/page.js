@@ -1,4 +1,5 @@
-'use client'; // Ensure that this page is rendered on the client side
+'use client'; // Make sure this page is client-rendered
+
 import { useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import Section from '../components/Section'; 
@@ -6,7 +7,7 @@ import MapIcon from '../components/MapIcon';
 import { motion } from 'framer-motion';
 import LocomotiveScroll from 'locomotive-scroll'; 
 
-// Disable SSR for the following components
+// Ensure all components are dynamically loaded with ssr: false
 const Navbar = dynamic(() => import('../components/Navbar'), { ssr: false });
 const GlobeWithRoutes = dynamic(() => import('../components/Globe'), { ssr: false });
 const ClientOnlyScroll = dynamic(() => import('../components/ClientOnlyScroll'), { ssr: false });
@@ -37,7 +38,6 @@ export default function Home() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // Ensure this code only runs on the client-side
       const loadGsap = async () => {
         try {
           const { gsap } = await import('gsap'); 
@@ -86,7 +86,6 @@ export default function Home() {
 
   useEffect(() => {
     if (gsapInstance && typeof window !== 'undefined') {
-      // Ensure GSAP animations only run on the client-side
       const tl = gsapInstance.timeline({
         scrollTrigger: {
           trigger: ".home-briefcase",
