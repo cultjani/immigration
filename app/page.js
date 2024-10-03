@@ -2,11 +2,11 @@
 import { useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import Section from '../components/Section'; 
-import Navbar from '../components/Navbar'; 
 import MapIcon from '../components/MapIcon'; 
 import { motion } from 'framer-motion';
 import LocomotiveScroll from 'locomotive-scroll'; 
 
+const Navbar = dynamic(() => import('../components/Navbar'), { ssr: false });
 const GlobeWithRoutes = dynamic(() => import('../components/Globe'), { ssr: false });
 const ClientOnlyScroll = dynamic(() => import('../components/ClientOnlyScroll'), { ssr: false });
 
@@ -83,7 +83,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (gsapInstance) {
+    if (gsapInstance && typeof window !== 'undefined') {
       const tl = gsapInstance.timeline({
         scrollTrigger: {
           trigger: ".home-briefcase",
@@ -139,6 +139,6 @@ export default function Home() {
         </Section>
 
       </div>
-    </> 
+    </>
   );
 }
