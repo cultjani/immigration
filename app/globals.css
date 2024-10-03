@@ -2,26 +2,134 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@font-face {
+  font-family: Lauanne;
+  src: url('./fonts/Lausanne-300.woff2');
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@font-face {
+  font-family: PP-NEUE;
+  src: url('./fonts/PPNEUEMONTREAL-MEDIUM.88EE7C9.woff2');
+}
+
+:root{
+  /* fonts  */
+  --Lauanne:"Lauanne";
+  --PP-NEUE:"PP-NEUE";
+
+  /* COLORS */
+  --pri-clr:#101010;
+  --sec-clr:#dadada;
+  --pri-light-clr:#3f3f3f;
+  --logo--clr:#3f3f3f;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: PP-NEUE;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* CANVAS  */
+.canvas-container {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  pointer-events: none; /* Allow scroll while interacting */
+}
+
+.canvas-container canvas {
+  pointer-events: auto; /* Allow canvas-specific events like mouse interaction */
+}
+
+.canvas-container {
+  overflow: visible !important;  /* Ensure that the canvas does not block scroll */
+}
+
+
+.section{
+  width: auto;
+  height: auto;
+  z-index: 10;
+  position: relative;
+}
+
+
+
+/* Basic setup for locomotive scroll */
+[data-scroll-container] {
+  position: relative;
+  overflow: hidden;
+}
+
+.has-scroll-smooth {
+  overflow: hidden;
+}
+
+[data-scroll-section] {
+  position: relative;
+  will-change: transform;
+}
+
+.has-scroll-init, .has-scroll-init [data-scroll-section] {
+  transform: translate3d(0, 0, 0);
+}
+
+/* Ensure that scroll container has correct styling on mobile */
+[data-scroll-container] {
+  overflow: hidden;
+}
+
+
+/* TEXT REVEAL  */
+.text-reveal-container {
+  overflow: hidden;  /* Each word will have its own container with hidden overflow */
+  display: inline-block;  /* Each word wraps into its own block */
+  width: auto;
+}
+
+.text-reveal-word {
+  display: inline-block;  /* Animate each word individually */
+  transform: translateY(100%);  /* Hidden by default (below the container) */
+  will-change: transform;  /* Optimize for performance */
+}
+
+
+
+.paragraph {
+  display: flex;
+  font-size: 60px;
+  line-height: 1;
+  padding: 40px;
+  max-width: 1280px;
+  color: white;
+  flex-wrap: wrap;
+}
+
+.paragraph .word {
+  position: relative;
+  margin-right: 12px;
+  margin-top: 12px;
+}
+
+.paragraph .word .shadow {
+  position: absolute;
+  opacity: 0.2; /* 20% opacity */
 }
