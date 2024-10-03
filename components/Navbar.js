@@ -31,26 +31,28 @@ const Navbar = () => {
 
   // Close the mobile menu if clicked outside
   useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target) &&
-        !hamburgerRef.current.contains(event.target)
-      ) {
-        setIsMobileMenuOpen(false); // Close the mobile menu
-        setIsDropdownOpen(false); // Close the dropdown
+    if (typeof window !== 'undefined') { // Ensure this code runs only on the client
+      const handleOutsideClick = (event) => {
+        if (
+          mobileMenuRef.current &&
+          !mobileMenuRef.current.contains(event.target) &&
+          !hamburgerRef.current.contains(event.target)
+        ) {
+          setIsMobileMenuOpen(false); // Close the mobile menu
+          setIsDropdownOpen(false); // Close the dropdown
+        }
+      };
+
+      if (isMobileMenuOpen) {
+        document.addEventListener('mousedown', handleOutsideClick);
+      } else {
+        document.removeEventListener('mousedown', handleOutsideClick);
       }
-    };
 
-    if (isMobileMenuOpen) {
-      document.addEventListener('mousedown', handleOutsideClick);
-    } else {
-      document.removeEventListener('mousedown', handleOutsideClick);
+      return () => {
+        document.removeEventListener('mousedown', handleOutsideClick);
+      };
     }
-
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    };
   }, [isMobileMenuOpen]);
 
   return (
@@ -216,6 +218,5 @@ const Navbar = () => {
     </div>
   );
 };
-
 
 export default Navbar;

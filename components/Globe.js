@@ -1,3 +1,4 @@
+// componenets/Globe.js
 'use client';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Stars, useGLTF } from '@react-three/drei';

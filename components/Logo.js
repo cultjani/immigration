@@ -1,3 +1,4 @@
+// componenets/Logo.js
 const Logo = () => (
 <svg height="16" width="77" fill="none" viewBox="0 0 77 16" xmlns="http://www.w3.org/2000/svg">
 	<path d="M76.0547 3.98535H64.6143V6.27344H76.0547V9.57129H64.6143V11.8594H76.0547V15.6191H59.7695V0.214844H76.0547V3.98535Z" fill="#101010"/>

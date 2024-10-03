@@ -1,3 +1,4 @@
+// componenets/MapIcon.js
 const MapIcon = () => (
 <svg height="auto" width="163" fill="none" viewBox="0 0 163 188" xmlns="http://www.w3.org/2000/svg">
 	<mask id="path-1-inside-1_27_42" fill="white">
