@@ -48,55 +48,58 @@ export default function Home() {
   const scrollContainerRef = useRef(null); // Ref for Locomotive Scroll container
 
   useEffect(() => {
-    // Dynamically import GSAP and ScrollTrigger only on the client side
-    const loadGsap = async () => {
-      try {
-        const { gsap } = await import('gsap');  // Import GSAP
-        const { ScrollTrigger } = await import('gsap/ScrollTrigger');  // Import ScrollTrigger
+    // Ensure this code only runs on the client-side
+    if (typeof window !== 'undefined') {
+      // Dynamically import GSAP and ScrollTrigger only on the client side
+      const loadGsap = async () => {
+        try {
+          const { gsap } = await import('gsap');  // Import GSAP
+          const { ScrollTrigger } = await import('gsap/ScrollTrigger');  // Import ScrollTrigger
 
-        // Register ScrollTrigger plugin
-        gsap.registerPlugin(ScrollTrigger);
+          // Register ScrollTrigger plugin
+          gsap.registerPlugin(ScrollTrigger);
 
-        // Set GSAP instance
-        setGsapInstance(gsap);
+          // Set GSAP instance
+          setGsapInstance(gsap);
 
-        // Initialize Locomotive Scroll
-        const locoScroll = new LocomotiveScroll({
-          el: scrollContainerRef.current,
-          smooth: true,
-          smartphone: { smooth: false },  // Disable smooth scroll on mobile
-          tablet: { smooth: false }       // Disable smooth scroll on tablet
-        });
+          // Initialize Locomotive Scroll
+          const locoScroll = new LocomotiveScroll({
+            el: scrollContainerRef.current,
+            smooth: true,
+            smartphone: { smooth: false },  // Disable smooth scroll on mobile
+            tablet: { smooth: false }       // Disable smooth scroll on tablet
+          });
 
-        // Set up GSAP's scrollerProxy for Locomotive Scroll
-        ScrollTrigger.scrollerProxy(scrollContainerRef.current, {
-          scrollTop(value) {
-            return arguments.length
-              ? locoScroll.scrollTo(value, 0, 0)
-              : locoScroll.scroll.instance.scroll.y;
-          },
-          getBoundingClientRect() {
-            return {
-              top: 0,
-              left: 0,
-              width: window.innerWidth,
-              height: window.innerHeight
-            };
-          },
-          pinType: scrollContainerRef.current.style.transform ? "transform" : "fixed"
-        });
+          // Set up GSAP's scrollerProxy for Locomotive Scroll
+          ScrollTrigger.scrollerProxy(scrollContainerRef.current, {
+            scrollTop(value) {
+              return arguments.length
+                ? locoScroll.scrollTo(value, 0, 0)
+                : locoScroll.scroll.instance.scroll.y;
+            },
+            getBoundingClientRect() {
+              return {
+                top: 0,
+                left: 0,
+                width: window.innerWidth,
+                height: window.innerHeight
+              };
+            },
+            pinType: scrollContainerRef.current.style.transform ? "transform" : "fixed"
+          });
 
-        // Refresh ScrollTrigger and Locomotive Scroll after loading
-        locoScroll.on('scroll', ScrollTrigger.update);
-        ScrollTrigger.addEventListener('refresh', () => locoScroll.update());
-        ScrollTrigger.refresh();
+          // Refresh ScrollTrigger and Locomotive Scroll after loading
+          locoScroll.on('scroll', ScrollTrigger.update);
+          ScrollTrigger.addEventListener('refresh', () => locoScroll.update());
+          ScrollTrigger.refresh();
 
-      } catch (error) {
-        console.error("Error loading GSAP or ScrollTrigger:", error);
-      }
-    };
+        } catch (error) {
+          console.error("Error loading GSAP or ScrollTrigger:", error);
+        }
+      };
 
-    loadGsap(); // Call the function to load GSAP and ScrollTrigger
+      loadGsap(); // Call the function to load GSAP and ScrollTrigger
+    }
   }, []);
 
   useEffect(() => {
@@ -155,17 +158,16 @@ export default function Home() {
 
         {/* Short Briefcase Section */}
         <Section customClass="home-briefcase">
-  <div className="bg-sec-clr w-screen h-screen p-8 flex items-start justify-center flex-col relative">
-    <span className='uppercase font-pp-neue'>- Short Briefcase</span>
-    <h1 className="briefcase-h1 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl leading-tight">
-      {splitTextIntoChars("We provide personalized visa solutions for study, work, and travel to help you achieve your international dreams.")}
-    </h1>
-    <div className='w-full h-40 bg-transparent flex items-center justify-end absolute bottom-0 right-0 p-5'>
-    <MapIcon/>
-    </div>
-  </div>
-</Section>
-
+          <div className="bg-sec-clr w-screen h-screen p-8 flex items-start justify-center flex-col relative">
+            <span className='uppercase font-pp-neue'>- Short Briefcase</span>
+            <h1 className="briefcase-h1 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl leading-tight">
+              {splitTextIntoChars("We provide personalized visa solutions for study, work, and travel to help you achieve your international dreams.")}
+            </h1>
+            <div className='w-full h-40 bg-transparent flex items-center justify-end absolute bottom-0 right-0 p-5'>
+              <MapIcon />
+            </div>
+          </div>
+        </Section>
       </div>
     </>
   );
