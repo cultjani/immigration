@@ -11,19 +11,31 @@ import LocomotiveScroll from 'locomotive-scroll'; // Make sure to install this
 const GlobeWithRoutes = dynamic(() => import('../components/Globe'), { ssr: false });
 const ClientOnlyScroll = dynamic(() => import('../components/ClientOnlyScroll'), { ssr: false });
 
+// Helper function to split the text into words and animate them with 3D rotation
 const AnimatedText = ({ text }) => {
   const words = text.split(' ');
 
   return (
-    <motion.div className='inline-block' style={{ perspective: 1000 }} initial="hidden" animate="visible" variants={{
-      hidden: { opacity: 0 },
-      visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
-    }}>
+    <motion.div 
+      className='inline-block' 
+      style={{ perspective: 1000 }}  // Adding perspective for 3D effect
+      initial="hidden" 
+      animate="visible" 
+      variants={{
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
+      }}
+    >
       {words.map((word, index) => (
-        <motion.span key={index} className='inline-block mr-2' variants={{
-          hidden: { opacity: 0, y: 100, scale: 0.9, rotateX: -90 },
-          visible: { opacity: 1, y: 0, scale: 1, rotateX: 0 }
-        }} transition={{ duration: 2, ease: "easeInOut" }}>
+        <motion.span 
+          key={index} 
+          className='inline-block mr-2'
+          variants={{
+            hidden: { opacity: 0, y: 100, scale: 0.9, rotateX: -90 },
+            visible: { opacity: 1, y: 0, scale: 1, rotateX: 0 }
+          }}
+          transition={{ duration: 2, ease: "easeInOut" }}
+        >
           {word}
         </motion.span>
       ))}
@@ -39,22 +51,26 @@ export default function Home() {
     if (typeof window !== 'undefined') {
       const loadGsap = async () => {
         try {
-          const { gsap } = await import('gsap'); 
-          const { ScrollTrigger } = await import('gsap/ScrollTrigger'); 
+          const { gsap } = await import('gsap');  // Import GSAP
+          const { ScrollTrigger } = await import('gsap/ScrollTrigger');  // Import ScrollTrigger
 
           gsap.registerPlugin(ScrollTrigger);
+
           setGsapInstance(gsap);
 
           const locoScroll = new LocomotiveScroll({
             el: scrollContainerRef.current,
             smooth: true,
-            smartphone: { smooth: false },
-            tablet: { smooth: false }
+            smartphone: { smooth: false },  // Disable smooth scroll on mobile
+            tablet: { smooth: false }       // Disable smooth scroll on tablet
           });
 
+          // Set up GSAP's scrollerProxy for Locomotive Scroll
           ScrollTrigger.scrollerProxy(scrollContainerRef.current, {
             scrollTop(value) {
-              return arguments.length ? locoScroll.scrollTo(value, 0, 0) : locoScroll.scroll.instance.scroll.y;
+              return arguments.length
+                ? locoScroll.scrollTo(value, 0, 0)
+                : locoScroll.scroll.instance.scroll.y;
             },
             getBoundingClientRect() {
               return {
@@ -67,6 +83,7 @@ export default function Home() {
             pinType: scrollContainerRef.current.style.transform ? "transform" : "fixed"
           });
 
+          // Refresh ScrollTrigger and Locomotive Scroll after loading
           locoScroll.on('scroll', ScrollTrigger.update);
           ScrollTrigger.addEventListener('refresh', () => locoScroll.update());
           ScrollTrigger.refresh();
@@ -82,26 +99,28 @@ export default function Home() {
 
   useEffect(() => {
     if (gsapInstance) {
+      // Create a timeline for briefcase-h1 animation and pinning
       const tl = gsapInstance.timeline({
         scrollTrigger: {
           trigger: ".home-briefcase",
-          start: "top top",
-          end: "300% bottom",
-          scroller: scrollContainerRef.current,
+          start: "top top",  // Pin starts when the section enters the viewport
+          end: "300% bottom", // End trigger at the bottom of the section
+          scroller: scrollContainerRef.current, // LocomotiveScroll container
           scrub: true,
-          pin: true,
-          invalidateOnRefresh: true,
-          markers: false
+          pin: true,  // Pin the home-briefcase section
+          invalidateOnRefresh: true, // Invalidate positions on refresh to avoid flickering
+          markers: false  // Enable markers for debugging
         }
       });
 
+      // Add animation to the timeline
       tl.fromTo(
         ".briefcase-h1 .char",
-        { opacity: 0.5, y: 100 }, 
+        { opacity: 0.5, y: 100 }, // Start with opacity and y offset
         { opacity: 1, y: 0, stagger: 0.05 }
       );
     }
-  }, [gsapInstance]);  
+  }, [gsapInstance]);  // Run this effect only after gsapInstance is loaded
 
   const splitTextIntoChars = (text) => {
     return text.split('').map((char, index) => (
@@ -111,10 +130,19 @@ export default function Home() {
 
   return (
     <>
+      {/* Navbar with fixed position */}
       <Navbar />
+
+      {/* Content inside Locomotive Scroll */}
       <div ref={scrollContainerRef} className="smooth-scroll">
-        <div className='w-full h-screen bg-black' data-scroll data-scroll-speed="-5">
+        {/* 3D Globe Component */}
+        <div 
+          className='w-full h-screen bg-black'
+          data-scroll 
+          data-scroll-speed="-5"
+        >
           <div className='w-full absolute top-[30%] md:top-[20%] bg-transparent flex items-center justify-center text-center'>
+            {/* Animated Text with Framer Motion */}
             <h1 className='text-sec-clr font-pp-neue text-3xl md:text-6xl lg:text-5xl xl:text-7xl' id='3d-heading'>
               <AnimatedText text="Your Gateway to Global Opportunities" />
             </h1>
@@ -123,6 +151,7 @@ export default function Home() {
           <GlobeWithRoutes />
         </div>
 
+        {/* Short Briefcase Section */}
         <Section customClass="home-briefcase">
           <div className="bg-sec-clr w-screen h-screen p-8 flex items-start justify-center flex-col relative">
             <span className='uppercase font-pp-neue'>- Short Briefcase</span>
