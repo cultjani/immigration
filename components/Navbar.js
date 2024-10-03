@@ -132,9 +132,9 @@ const Navbar = () => {
       {/* Full-Screen Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <div ref={mobileMenuRef} className="w-full fixed top-0 left-0 z-[-1000] bg-transparent flex items-center justify-center">
+          <div ref={mobileMenuRef} className="w-full fixed top-0 left-0 z-50 bg-transparent flex items-center justify-center">
             <motion.div
-              className="z-[-1000] mt-4 top-0 fixed rounded-[0.5rem] w-[95%] bg-[#dadada] text-[#101010] flex flex-col items-start  px-3 md:hidden"
+              className="z-50 mt-4 top-0 fixed rounded-[0.5rem] w-[95%] bg-[#dadada] text-[#101010] flex flex-col items-start  px-3 md:hidden"
               initial={{ height: '0%' }}
               animate={{ height: 'auto' }}
               exit={{ height: '0' }}
@@ -202,7 +202,7 @@ const Navbar = () => {
                 <div className="h-full flex items-end py-5">
                   <AnimatedButton 
                    className="text-4xl uppercase bg-black text-[#dadada] px-10 py-4 rounded-md" // Custom styles for the button
-                   text="INSTANET PAYMENT"
+                   text="INSTANT PAYMENT"
                    href="/contact"
                    Icon={PaymentIcon}
                    iconClassName="w-8 h-8 text-white" // Custom size and color for the icon using Tailwind
